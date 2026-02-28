@@ -1,43 +1,55 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<h2 class="text-2xl lg:text-3xl font-semibold text-sullips-text tracking-tight mb-8">Edit your account</h2>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-6" }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  <div>
+    <%= f.label :email, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email",
+        class: "form-input-auth" %>
   </div>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+    <p class="text-sullips-muted text-sm">Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
   <% end %>
 
-  <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
+  <div>
+    <%= f.label :password, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
+    <span class="text-sullips-muted text-sm">(leave blank if you don't want to change it)</span>
+    <%= f.password_field :password, autocomplete: "new-password",
+        class: "form-input-auth mt-1" %>
     <% if @minimum_password_length %>
-      <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
+      <span class="text-sullips-muted text-sm block mt-1"><%= @minimum_password_length %> characters minimum</span>
     <% end %>
   </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  <div>
+    <%= f.label :password_confirmation, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password",
+        class: "form-input-auth" %>
   </div>
 
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
+  <div>
+    <%= f.label :current_password, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
+    <span class="text-sullips-muted text-sm">(we need your current password to confirm your changes)</span>
+    <%= f.password_field :current_password, autocomplete: "current-password",
+        class: "form-input-auth mt-1" %>
   </div>
 
-  <div class="actions">
-    <%= f.submit "Update" %>
+  <div class="pt-2">
+    <%= f.submit "Update", class: "form-submit-auth" %>
   </div>
 <% end %>
 
-<h3>Cancel my account</h3>
+<div class="mt-8 pt-8 border-t border-sullips-border/60">
+  <h3 class="text-lg font-semibold text-sullips-text mb-4">Cancel my account</h3>
+  <p class="text-sullips-muted text-sm mb-4">Unhappy? You can cancel your account below.</p>
+  <%= button_to "Cancel my account", registration_path(resource_name),
+      data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" },
+      method: :delete,
+      class: "text-sullips-clay hover:text-sullips-logo text-sm font-medium transition-colors" %>
+</div>
 
-<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
-
-<%= link_to "Back", :back %>
+<div class="mt-6">
+  <%= link_to "Back", :back, class: "text-sullips-muted hover:text-sullips-moss text-sm transition-colors border-b border-transparent hover:border-sullips-moss/30" %>
+</div>

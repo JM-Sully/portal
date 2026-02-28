@@ -7,7 +7,4 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   encrypts :email, deterministic: true
-
-  validates :email, presence: true, uniqueness: true
-  validates :password, presence: true, length: { minimum: 8 }
 end

@@ -1,36 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Portal</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <%= render "layouts/head" %>
   </head>
 
-  <body class="font-sans bg-white min-h-screen">
-    <% if notice.present? %>
-      <p class="notice fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg bg-sullips-moss text-sullips-parchment text-sm shadow-soft"><%= notice %></p>
-    <% end %>
-    <% if alert.present? %>
-      <p class="alert fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg bg-sullips-clay text-sullips-parchment text-sm shadow-soft"><%= alert %></p>
-    <% end %>
+  <body class="font-sans bg-sullips-parchment min-h-screen antialiased">
+    <%= render "layouts/flash_messages" %>
 
     <% if user_signed_in? %>
-      <header class="bg-sullips-surface border-b border-sullips-border shadow-soft">
-        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+      <header class="bg-sullips-surface border-b border-sullips-border/80 shadow-soft">
+        <div class="container mx-auto px-6 py-4 flex items-center justify-between">
           <div class="flex items-center gap-3">
             <%= image_tag "logo.svg", alt: "Sullips Ltd", class: "h-8 w-auto" %>
-            <span class="text-sullips-logo font-medium text-lg">Sullips Ltd</span>
+            <span class="text-sullips-logo font-medium text-xl tracking-[0.15em] uppercase">Sullips Ltd</span>
           </div>
           <%= button_to "Log out", destroy_user_session_path, method: :delete, data: { turbo: false },
-              class: "px-4 py-2 rounded-lg bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment text-sm font-medium transition-colors cursor-pointer" %>
+              class: "px-4 py-2 rounded-md bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment text-sm font-medium transition-all duration-200 cursor-pointer shadow-sullips hover:shadow-sullips active:scale-[0.99]" %>
         </div>
       </header>
     <% end %>
