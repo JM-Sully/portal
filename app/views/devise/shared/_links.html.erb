@@ -1,39 +1,39 @@
-<div class="space-y-2 text-center text-sm">
+<div class="space-y-3 text-center text-sm">
   <%- if controller_name != 'sessions' %>
-    <p>
+    <p class="text-sullips-text">
       Already have an account?
-      <%= link_to "Log in", new_session_path(resource_name), class: "font-medium text-sullips-moss hover:text-sullips-pine transition-colors" %>
+      <%= link_to "Log in", new_session_path(resource_name), class: "link-auth" %>
     </p>
   <% end %>
 
   <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-    <p>
+    <p class="text-sullips-text">
       Don't have an account?
-      <%= link_to "Sign up", new_registration_path(resource_name), class: "font-medium text-sullips-moss hover:text-sullips-pine transition-colors" %>
+      <%= link_to "Sign up", new_registration_path(resource_name), class: "link-auth" %>
     </p>
   <% end %>
 
   <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
     <p>
-      <%= link_to "Forgot your password?", new_password_path(resource_name), class: "text-sullips-muted hover:text-sullips-moss transition-colors" %>
+      <%= link_to "Forgot your password?", new_password_path(resource_name), class: "link-auth-muted" %>
     </p>
   <% end %>
 
   <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
     <p>
-      <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name), class: "text-sullips-muted hover:text-sullips-moss transition-colors" %>
+      <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name), class: "link-auth-muted" %>
     </p>
   <% end %>
 
   <%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != 'unlocks' %>
     <p>
-      <%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name), class: "text-sullips-muted hover:text-sullips-moss transition-colors" %>
+      <%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name), class: "link-auth-muted" %>
     </p>
   <% end %>
 
   <%- if devise_mapping.omniauthable? %>
     <%- resource_class.omniauth_providers.each do |provider| %>
-      <%= button_to "Sign in with #{OmniAuth::Utils.camelize(provider)}", omniauth_authorize_path(resource_name, provider), data: { turbo: false }, class: "w-full mt-2 py-2 px-4 rounded-lg border border-sullips-border bg-white text-sullips-text hover:bg-sullips-chip transition-colors text-sm font-medium" %>
+      <%= button_to "Sign in with #{OmniAuth::Utils.camelize(provider)}", omniauth_authorize_path(resource_name, provider), data: { turbo: false }, class: "w-full mt-3 py-2.5 px-4 rounded-md border border-sullips-border bg-sullips-parchment text-sullips-text hover:bg-sullips-chip hover:border-sullips-moss/50 transition-all duration-200 text-sm font-medium" %>
     <% end %>
   <% end %>
 </div>

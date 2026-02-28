@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%= render "layouts/head" %>
+  </head>
+
+  <body class="font-sans bg-sullips-parchment min-h-screen antialiased">
+    <%= render "layouts/flash_messages" %>
+
+    <div class="min-h-screen flex flex-col lg:flex-row">
+      <%# Left: Form panel with subtle gradient %>
+      <div class="w-full lg:w-1/2 flex flex-col items-center justify-center py-16 px-6 lg:px-16 bg-gradient-to-br from-sullips-parchment to-sullips-surface">
+        <div class="w-full max-w-xs">
+          <%= yield %>
+        </div>
+      </div>
+
+      <%# Right: Branding panel %>
+      <div class="w-full lg:w-1/2 bg-sullips-surface flex flex-col items-center justify-center py-16 px-12 lg:px-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-sullips-border/20 to-transparent pointer-events-none"></div>
+        <div class="relative flex flex-col items-center">
+          <div class="h-28 lg:h-40 w-28 lg:w-40 rounded-full bg-sullips-moss/10 flex items-center justify-center mb-8 shadow-logo">
+            <%= image_tag "logo.svg", alt: "Sullips Ltd", class: "h-20 lg:h-28 w-auto" %>
+          </div>
+          <h1 class="text-sullips-logo text-2xl lg:text-4xl font-medium tracking-[0.15em] uppercase">Sullips Ltd</h1>
+          <p class="text-sullips-muted text-sm mt-3 tracking-[0.2em] uppercase">Private access</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

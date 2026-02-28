@@ -1,35 +1,20 @@
-<div class="min-h-screen flex flex-col lg:flex-row">
-  <%# Left 1/2: Forgot password form %>
-  <div class="w-full lg:w-1/2 bg-white flex flex-col items-center justify-center py-12 px-6 lg:px-12">
-    <div class="w-full max-w-sm">
-      <h2 class="text-sullips-text text-2xl font-semibold mb-6">Forgot your password?</h2>
+<h2 class="text-2xl lg:text-3xl font-semibold text-sullips-text tracking-tight mb-8">Forgot your password?</h2>
 
-      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "space-y-5 border-0 border-t-0" }) do |f| %>
-        <% if resource.errors.any? %>
-          <%= render "devise/shared/error_messages", resource: resource %>
-        <% end %>
+<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "space-y-6" }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
 
-        <div>
-          <%= f.label :email, class: "block text-sm font-medium text-sullips-text mb-1" %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email",
-              class: "w-full rounded-lg border-sullips-border bg-sullips-input text-sullips-text placeholder-sullips-muted focus:border-sullips-moss focus:ring-sullips-moss px-4 py-2.5 border focus:outline-none focus:ring-2" %>
-        </div>
-
-        <div class="pt-2">
-          <%= f.submit "Send me reset password instructions",
-              class: "w-full bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment font-medium py-3 px-4 rounded-lg transition-colors cursor-pointer" %>
-        </div>
-      <% end %>
-
-      <div class="mt-6 pt-6 border-t border-sullips-border">
-        <%= render "devise/shared/links" %>
-      </div>
-    </div>
+  <div>
+    <%= f.label :email, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email",
+        class: "form-input-auth" %>
   </div>
 
-  <%# Right 1/2: Logo and branding %>
-  <div class="w-full lg:w-1/2 bg-sullips-surface flex flex-col items-center justify-center py-12 px-6">
-    <%= image_tag "logo.svg", alt: "Sullips Ltd", class: "h-24 lg:h-40 w-auto mb-6" %>
-    <h1 class="text-sullips-logo text-2xl lg:text-4xl font-medium tracking-tight">Sullips Ltd</h1>
+  <div class="pt-2">
+    <%= f.submit "Send me reset password instructions",
+        class: "form-submit-auth" %>
   </div>
+<% end %>
+
+<div class="mt-8 pt-8 border-t border-sullips-border/60">
+  <%= render "devise/shared/links" %>
 </div>

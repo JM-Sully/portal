@@ -14,9 +14,39 @@
   --color-sullips-input: #faf9f6;
   --color-sullips-logo: #7d4335;
 
-  /* Custom shadow */
+  /* Custom shadows */
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-sullips: 0 2px 8px rgba(95, 122, 97, 0.15), 0 4px 16px rgba(0, 0, 0, 0.04);
+  --shadow-logo: 0 4px 24px rgba(125, 67, 53, 0.12);
 
-  /* Default font family - clean geometric sans with straight letterforms */
+  /* Font family - Inter only for cohesive typography */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer components {
+  .form-input-auth {
+    @apply w-full rounded-md border border-sullips-border bg-sullips-input text-sullips-text placeholder-sullips-muted;
+    @apply focus:border-sullips-moss focus:ring-2 focus:ring-sullips-moss/30 focus:outline-none;
+    @apply px-4 py-2.5 transition-all duration-200;
+  }
+
+  .form-submit-auth {
+    @apply w-full bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment font-medium;
+    @apply py-3 px-4 rounded-md transition-all duration-200 cursor-pointer;
+    @apply shadow-sullips hover:shadow-sullips active:scale-[0.99];
+  }
+
+  .link-auth {
+    @apply font-medium text-sullips-moss hover:text-sullips-pine transition-colors duration-200;
+    @apply border-b border-transparent hover:border-sullips-moss/50;
+  }
+
+  .link-auth-muted {
+    @apply text-sullips-muted hover:text-sullips-moss transition-colors duration-200;
+    @apply border-b border-transparent hover:border-sullips-moss/30;
+  }
+
+  .link-underline-auth {
+    @apply border-b border-transparent hover:border-sullips-moss/30;
+  }
 }
