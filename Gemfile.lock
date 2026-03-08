@@ -145,8 +145,7 @@ GEM
     matrix (0.4.3)
     method_source (1.1.0)
     mini_mime (1.1.5)
-    minitest (6.0.1)
-      prism (~> 1.5)
+    minitest (5.27.0)
     msgpack (1.8.0)
     mutex_m (0.3.0)
     net-imap (0.6.3)
@@ -310,6 +309,7 @@ DEPENDENCIES
   foreman
   importmap-rails
   jbuilder
+  minitest (~> 5.0)
   puma (>= 5.0)
   rails (~> 7.0.8)
   selenium-webdriver

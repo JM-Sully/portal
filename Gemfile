@@ -80,4 +80,7 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara'
   gem 'selenium-webdriver'
+  
+  # Lock minitest to 5.x for Rails 7.0.10 compatibility
+  gem 'minitest', '~> 5.0'
 end
