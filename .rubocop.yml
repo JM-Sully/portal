@@ -1,2 +1,21 @@
+# RuboCop configuration for Portal
+
+# Exclude auto-generated files
+AllCops:
+  Exclude:
+    - 'db/schema.rb'
+    - 'bin/**/*'
+    - 'config/**/*'
+    - 'db/migrate/**/*'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+
+# Use single quotes for strings (unless interpolation needed)
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+  Exclude:
+    - 'db/schema.rb'
+
+# Disable documentation requirement
 Style/Documentation:
   Enabled: false
