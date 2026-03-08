@@ -24,19 +24,21 @@
       <%= yield %>
     </main>
 
-    <footer class="bg-sullips-surface border-t border-sullips-border/80 mt-auto">
-      <div class="container mx-auto px-6 py-8">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div class="text-center md:text-left">
-            <p class="text-sullips-text font-medium">Sullips Ltd</p>
-            <p class="text-sullips-muted text-sm mt-1">Established January 2026</p>
+    <% if user_signed_in? %>
+      <footer class="bg-sullips-surface border-t border-sullips-border/80 mt-auto">
+        <div class="container mx-auto px-6 py-8">
+          <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="text-center md:text-left">
+              <p class="text-sullips-text font-medium">Sullips Ltd</p>
+              <p class="text-sullips-muted text-sm mt-1">Established January 2026</p>
+            </div>
+            <button type="button" onclick="return false;" 
+                    class="px-6 py-2 rounded-md bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment text-sm font-medium transition-all duration-200 cursor-pointer shadow-sullips hover:shadow-sullips active:scale-[0.99]">
+              Contact Jess
+            </button>
           </div>
-          <button type="button" onclick="return false;" 
-                  class="px-6 py-2 rounded-md bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment text-sm font-medium transition-all duration-200 cursor-pointer shadow-sullips hover:shadow-sullips active:scale-[0.99]">
-            Contact Jess
-          </button>
         </div>
-      </div>
-    </footer>
+      </footer>
+    <% end %>
   </body>
 </html>

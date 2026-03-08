@@ -7,4 +7,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   encrypts :email, deterministic: true
+
+  has_many :orders, dependent: :destroy
 end

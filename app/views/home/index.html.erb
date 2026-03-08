@@ -1,10 +1,32 @@
-<div class="container mx-auto px-6 py-16">
-  <div class="max-w-2xl">
-    <h1 class="text-3xl lg:text-4xl font-semibold text-sullips-text tracking-tight mb-6">
-      Welcome back
-    </h1>
-    <p class="text-sullips-muted text-lg leading-relaxed">
-      You're signed in to your Sullips Ltd account. This is your private portal.
-    </p>
+<div class="container mx-auto px-6 pt-6 pb-12">
+  <div class="max-w-7xl">
+    <!-- My Orders Section -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold text-sullips-text mb-4">My Orders</h2>
+      
+      <% if @orders.any? %>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <% @orders.each do |order| %>
+            <%= render 'shared/order_card', order: order %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="bg-sullips-surface border border-sullips-border rounded-lg p-6 text-center mb-8">
+          <p class="text-sullips-muted text-lg">You haven't placed any orders yet.</p>
+          <p class="text-sullips-muted text-sm mt-2">Browse available services below to get started.</p>
+        </div>
+      <% end %>
+    </section>
+
+    <!-- Available Services Section -->
+    <section>
+      <h2 class="text-2xl font-semibold text-sullips-text mb-4">Available Services</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% @products.each do |product| %>
+          <%= render 'shared/product_card', product: product %>
+        <% end %>
+      </div>
+    </section>
   </div>
 </div>

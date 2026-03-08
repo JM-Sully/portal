@@ -1,0 +1,29 @@
+<div class="bg-sullips-surface border border-sullips-border rounded-lg overflow-hidden shadow-soft hover:shadow-sullips transition-all duration-200 hover:-translate-y-1 flex flex-col">
+  <%= product_image_tag(product) %>
+  
+  <div class="p-6 flex flex-col flex-grow">
+    <h3 class="text-xl font-semibold text-sullips-text mb-3">
+      <%= product.title %>
+    </h3>
+    <p class="text-sullips-muted text-sm mb-6 leading-relaxed flex-grow">
+      <%= product.description %>
+    </p>
+    
+    <div class="flex items-center justify-between mt-auto">
+      <% if product.external_url.present? %>
+        <%= link_to product.external_url, target: '_blank', rel: 'noopener noreferrer',
+            class: 'px-4 py-2 rounded-md bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment text-sm font-medium transition-all duration-200 cursor-pointer shadow-sullips hover:shadow-sullips active:scale-[0.99]' do %>
+          Book on Rover
+        <% end %>
+      <% else %>
+        <%= button_to 'Purchase', orders_path(product_id: product.id),
+            method: :post,
+            class: 'px-4 py-2 rounded-md bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment text-sm font-medium transition-all duration-200 cursor-pointer shadow-sullips hover:shadow-sullips active:scale-[0.99]' %>
+      <% end %>
+      
+      <% if product.variable_pricing? %>
+        <span class="text-sullips-moss text-sm font-medium">Variable pricing</span>
+      <% end %>
+    </div>
+  </div>
+</div>

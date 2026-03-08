@@ -1,0 +1,20 @@
+<div class="bg-sullips-surface border border-sullips-border rounded-lg overflow-hidden shadow-soft hover:shadow-sullips transition-shadow duration-200 flex flex-col">
+  <%= product_image_tag(order.product) %>
+  
+  <div class="p-6 flex flex-col flex-grow">
+    <h3 class="text-xl font-semibold text-sullips-text mb-2">
+      <%= order.product.title %>
+    </h3>
+    <p class="text-sullips-muted text-sm mb-4 line-clamp-2 flex-grow">
+      <%= order.product.description %>
+    </p>
+    <div class="flex items-center justify-between mt-auto">
+      <span class="text-sullips-text text-sm font-medium">
+        Ordered <%= time_ago_in_words(order.created_at) %> ago
+      </span>
+      <% if order.product.variable_pricing? %>
+        <span class="text-sullips-moss text-sm font-medium">Variable pricing</span>
+      <% end %>
+    </div>
+  </div>
+</div>

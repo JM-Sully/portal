@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: A guided Lowland Walk
+  description: Jess is a qualified Lowland leader so she can lead you and a group of friends on beautiful walks through the Scottish Lowlands.
+  amount_type: variable
+  external_url:
+
+two:
+  title: Conference Talk
+  description: Jess can talk about all sorts of things, from Rails internals to leading book clubs!
+  amount_type: variable
+  external_url:
