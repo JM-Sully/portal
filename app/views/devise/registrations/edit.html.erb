@@ -1,44 +1,7 @@
 <h2 class="text-2xl lg:text-3xl font-semibold text-sullips-text tracking-tight mb-8">Edit your account</h2>
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "space-y-6" }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-
-  <div>
-    <%= f.label :email, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
-    <%= f.email_field :email, autofocus: true, autocomplete: "email",
-        class: "form-input-auth" %>
-  </div>
-
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <p class="text-sullips-muted text-sm">Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
-  <% end %>
-
-  <div>
-    <%= f.label :password, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
-    <span class="text-sullips-muted text-sm">(leave blank if you don't want to change it)</span>
-    <%= f.password_field :password, autocomplete: "new-password",
-        class: "form-input-auth mt-1" %>
-    <% if @minimum_password_length %>
-      <span class="text-sullips-muted text-sm block mt-1"><%= @minimum_password_length %> characters minimum</span>
-    <% end %>
-  </div>
-
-  <div>
-    <%= f.label :password_confirmation, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
-    <%= f.password_field :password_confirmation, autocomplete: "new-password",
-        class: "form-input-auth" %>
-  </div>
-
-  <div>
-    <%= f.label :current_password, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
-    <span class="text-sullips-muted text-sm">(we need your current password to confirm your changes)</span>
-    <%= f.password_field :current_password, autocomplete: "current-password",
-        class: "form-input-auth mt-1" %>
-  </div>
-
-  <div class="pt-2">
-    <%= f.submit "Update", class: "form-submit-auth" %>
-  </div>
+  <%= render 'devise/registrations/form', f: f, button_text: 'Update', show_current_password: true %>
 <% end %>
 
 <div class="mt-8 pt-8 border-t border-sullips-border/60">

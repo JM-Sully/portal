@@ -1,0 +1,56 @@
+<%= render "devise/shared/error_messages", resource: resource %>
+
+<div>
+  <%= f.label :first_name, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
+  <%= f.text_field :first_name, autofocus: true, autocomplete: "given-name",
+      class: "form-input-auth" %>
+</div>
+
+<div>
+  <%= f.label :last_name, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
+  <%= f.text_field :last_name, autocomplete: "family-name",
+      class: "form-input-auth" %>
+</div>
+
+<div>
+  <%= f.label :email, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
+  <%= f.email_field :email, autocomplete: "email",
+      class: "form-input-auth" %>
+</div>
+
+<% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+  <p class="text-sullips-muted text-sm">Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
+<% end %>
+
+<div>
+  <%= f.label :password, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
+  <% if local_assigns[:show_current_password] %>
+    <span class="text-sullips-muted text-sm">(leave blank if you don't want to change it)</span>
+  <% elsif @minimum_password_length %>
+    <span class="text-sullips-muted text-sm">(<%= @minimum_password_length %> characters minimum)</span>
+  <% end %>
+  <%= f.password_field :password, autocomplete: "new-password",
+      class: "form-input-auth mt-1" %>
+  <% if local_assigns[:show_current_password] && @minimum_password_length %>
+    <span class="text-sullips-muted text-sm block mt-1"><%= @minimum_password_length %> characters minimum</span>
+  <% end %>
+</div>
+
+<div>
+  <%= f.label :password_confirmation, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
+  <%= f.password_field :password_confirmation, autocomplete: "new-password",
+      class: "form-input-auth" %>
+</div>
+
+<% if local_assigns[:show_current_password] %>
+  <div>
+    <%= f.label :current_password, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
+    <span class="text-sullips-muted text-sm">(we need your current password to confirm your changes)</span>
+    <%= f.password_field :current_password, autocomplete: "current-password",
+        class: "form-input-auth mt-1" %>
+  </div>
+<% end %>
+
+<div class="pt-2">
+  <%= f.submit button_text, class: "form-submit-auth" %>
+</div>
