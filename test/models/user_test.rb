@@ -36,4 +36,41 @@ class UserTest < ActiveSupport::TestCase
     assert_not user.valid?
     assert user.errors[:email].any?, 'expected errors on email'
   end
+
+  test 'requires unique email case-insensitively' do
+    User.create!(
+      first_name: 'Jane',
+      last_name: 'Doe',
+      email: 'duplicate@example.com',
+      password: 'password123'
+    )
+    duplicate = User.new(
+      first_name: 'Other',
+      last_name: 'Person',
+      email: 'DUPLICATE@example.com',
+      password: 'password123'
+    )
+
+    assert_not duplicate.valid?
+    assert_includes duplicate.errors[:email], 'has already been taken'
+  end
+
+  test 'rejects invalid email formats' do
+    user = users(:one)
+
+    %w[plaintext user@ @domain.com user@.com].each do |bad_email|
+      user.email = bad_email
+      assert_not user.valid?, "#{bad_email} should be invalid"
+      assert user.errors[:email].any?, "expected email error for #{bad_email}"
+    end
+  end
+
+  test 'accepts valid email formats' do
+    user = users(:one)
+
+    %w[user@example.com first.last@domain.co user+tag@example.org].each do |good_email|
+      user.email = good_email
+      assert user.valid?, "#{good_email} should be valid but got: #{user.errors.full_messages}"
+    end
+  end
 end

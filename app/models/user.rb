@@ -10,6 +10,7 @@ class User < ApplicationRecord
   encrypts :email, deterministic: true
 
   validates :first_name, :last_name, :email, presence: true
+  validates :email, uniqueness: { case_sensitive: false }, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   has_many :orders, dependent: :destroy
 end
