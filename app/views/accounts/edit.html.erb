@@ -1,0 +1,47 @@
+<div class="container mx-auto px-6 pt-6 pb-12">
+  <div class="max-w-lg">
+    <h2 class="text-2xl lg:text-3xl font-semibold text-sullips-text tracking-tight mb-8">Account Settings</h2>
+
+    <%= form_with model: @user, url: account_path, method: :patch, html: { class: "space-y-6" } do |f| %>
+      <% if @user.errors.any? %>
+        <div id="error_explanation" class="mb-6 p-4 rounded-md bg-sullips-clay/10 border border-sullips-clay/30">
+          <h3 class="text-sm font-medium text-sullips-clay mb-2">
+            <%= I18n.t('errors.messages.not_saved',
+                       count: @user.errors.count,
+                       resource: User.model_name.human.downcase) %>
+          </h3>
+          <ul class="list-disc list-inside text-sm text-sullips-muted space-y-1">
+            <% @user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div>
+        <%= f.label :first_name, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
+        <%= f.text_field :first_name, autofocus: true, autocomplete: "given-name",
+            class: "form-input-auth" %>
+      </div>
+
+      <div>
+        <%= f.label :last_name, class: "block text-sm font-medium text-sullips-text mb-1.5 tracking-wide" %>
+        <%= f.text_field :last_name, autocomplete: "family-name",
+            class: "form-input-auth" %>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-sullips-text mb-1.5 tracking-wide">Email</label>
+        <p class="w-full rounded-md border border-sullips-border bg-sullips-chip/40 text-sullips-muted px-4 py-2.5"><%= @user.email %></p>
+      </div>
+
+      <div class="pt-2">
+        <%= f.submit 'Save changes', class: "form-submit-auth" %>
+      </div>
+    <% end %>
+
+    <div class="mt-6">
+      <%= link_to "Back", root_path, class: "text-sullips-muted hover:text-sullips-moss text-sm transition-colors border-b border-transparent hover:border-sullips-moss/30" %>
+    </div>
+  </div>
+</div>
