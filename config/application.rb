@@ -11,7 +11,12 @@ Bundler.require(*Rails.groups)
 module Portal
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
+
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -26,5 +31,6 @@ module Portal
     config.active_record.encryption.key_derivation_salt = ENV.fetch('ENCRYPTION_KEY_DERIVATION_SALT')
 
     config.active_record.encryption.support_unencrypted_data = true
+    # config.active_record.encryption.hash_digest_class = OpenSSL::Digest::SHA256
   end
 end
