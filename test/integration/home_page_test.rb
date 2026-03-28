@@ -43,6 +43,26 @@ class HomePageTest < ActionDispatch::IntegrationTest
     assert_select 'h3', text: @product1.title
   end
 
+  test 'pending order card links to order show page' do
+    sign_in @user
+    order = orders(:one)
+    order.update!(user: @user, status: :pending)
+
+    get root_path
+    assert_response :success
+    assert_select "a[href='#{order_path(order)}']"
+  end
+
+  test 'confirmed order card is not linked to order show' do
+    sign_in @user
+    order = orders(:one)
+    order.update!(user: @user, status: :confirmed)
+
+    get root_path
+    assert_response :success
+    assert_select "a[href='#{order_path(order)}']", count: 0
+  end
+
   test 'displays all available products' do
     sign_in @user
     get root_path

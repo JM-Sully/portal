@@ -10,6 +10,8 @@ Rails.application.routes.draw do
     resource :booking, only: %i[new create], controller: 'bookings'
   end
 
+  resources :orders, only: [:show]
+
   # Defines the root path route ("/")
   root 'home#index'
 end

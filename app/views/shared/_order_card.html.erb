@@ -1,4 +1,4 @@
-<div class="bg-sullips-surface border border-sullips-border rounded-lg overflow-hidden shadow-soft hover:shadow-sullips transition-shadow duration-200 flex flex-col">
+<% card_inner = capture do %>
   <%= product_image_tag(order.product) %>
 
   <div class="p-6 flex flex-col flex-grow">
@@ -40,4 +40,15 @@
       <% end %>
     </div>
   </div>
-</div>
+<% end %>
+
+<% if order.pending? %>
+  <%= link_to order_path(order),
+      class: 'bg-sullips-surface border border-sullips-border rounded-lg overflow-hidden shadow-soft hover:shadow-sullips transition-all duration-200 hover:-translate-y-1 flex flex-col text-inherit no-underline block focus:outline-none focus-visible:ring-2 focus-visible:ring-sullips-moss focus-visible:ring-offset-2 focus-visible:ring-offset-sullips-parchment' do %>
+    <%= card_inner %>
+  <% end %>
+<% else %>
+  <div class="bg-sullips-surface border border-sullips-border rounded-lg overflow-hidden shadow-soft hover:shadow-sullips transition-shadow duration-200 flex flex-col">
+    <%= card_inner %>
+  </div>
+<% end %>
