@@ -127,4 +127,64 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to order_path(@order)
     assert_match(/Only pending bookings can be edited/, flash[:alert])
   end
+
+  test 'cancel sets cancelled status and timestamp for pending order' do
+    sign_in @user
+    post cancel_order_path(@order)
+    assert_redirected_to order_path(@order)
+    assert_equal 'Booking cancelled.', flash[:notice]
+    @order.reload
+    assert @order.cancelled?
+    assert_not_nil @order.cancelled_at
+  end
+
+  test 'cancel sets cancelled status for confirmed order' do
+    sign_in @user
+    @order.update!(status: :confirmed)
+    post cancel_order_path(@order)
+    assert_redirected_to order_path(@order)
+    @order.reload
+    assert @order.cancelled?
+    assert_not_nil @order.cancelled_at
+  end
+
+  test 'cancel redirects when already cancelled' do
+    sign_in @user
+    @order.update!(status: :cancelled, cancelled_at: 1.hour.ago)
+    post cancel_order_path(@order)
+    assert_redirected_to order_path(@order)
+    assert_match(/cannot be cancelled/, flash[:alert])
+  end
+
+  test 'cancel redirects for another users order' do
+    sign_in @user
+    post cancel_order_path(orders(:two))
+    assert_redirected_to root_path
+  end
+
+  test 'show includes cancel for pending and confirmed' do
+    sign_in @user
+    get order_path(@order)
+    assert_select 'button', text: 'Cancel'
+
+    @order.update!(status: :confirmed)
+    get order_path(@order)
+    assert_select 'button', text: 'Cancel'
+  end
+
+  test 'show omits cancel for cancelled order' do
+    sign_in @user
+    @order.update!(status: :cancelled, cancelled_at: Time.current)
+    get order_path(@order)
+    assert_select 'button', text: 'Cancel', count: 0
+  end
+
+  test 'show displays cancelled timestamp when cancelled' do
+    sign_in @user
+    t = Time.zone.parse('2026-04-10 15:30:00')
+    @order.update!(status: :cancelled, cancelled_at: t)
+    get order_path(@order)
+    assert_select 'dt', text: 'Cancelled'
+    assert_match(/10 April 2026 at 15:30/, response.body)
+  end
 end

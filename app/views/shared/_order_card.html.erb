@@ -31,24 +31,23 @@
         </p>
       <% end %>
     <% end %>
-    <div class="flex items-center justify-between mt-auto pt-2">
-      <span class="text-sullips-text text-sm font-medium">
-        Requested <%= time_ago_in_words(order.created_at) %> ago
-      </span>
-      <% if order.product.variable_pricing? %>
-        <span class="text-sullips-moss text-sm font-medium">Variable pricing</span>
-      <% end %>
-    </div>
+    <% show_order_footer = !order.cancelled? || order.product.variable_pricing? %>
+    <% if show_order_footer %>
+      <div class="flex items-center mt-auto pt-2 <%= order.cancelled? ? 'justify-end' : 'justify-between' %>">
+        <% unless order.cancelled? %>
+          <span class="text-sullips-text text-sm font-medium">
+            Requested <%= time_ago_in_words(order.created_at) %> ago
+          </span>
+        <% end %>
+        <% if order.product.variable_pricing? %>
+          <span class="text-sullips-moss text-sm font-medium">Variable pricing</span>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 <% end %>
 
-<% if order.pending? %>
-  <%= link_to order_path(order),
-      class: 'bg-sullips-surface border border-sullips-border rounded-lg overflow-hidden shadow-soft hover:shadow-sullips transition-all duration-200 hover:-translate-y-1 flex flex-col text-inherit no-underline block focus:outline-none focus-visible:ring-2 focus-visible:ring-sullips-moss focus-visible:ring-offset-2 focus-visible:ring-offset-sullips-parchment' do %>
-    <%= card_inner %>
-  <% end %>
-<% else %>
-  <div class="bg-sullips-surface border border-sullips-border rounded-lg overflow-hidden shadow-soft hover:shadow-sullips transition-shadow duration-200 flex flex-col">
-    <%= card_inner %>
-  </div>
+<%= link_to order_path(order),
+    class: 'bg-sullips-surface border border-sullips-border rounded-lg overflow-hidden shadow-soft hover:shadow-sullips transition-all duration-200 hover:-translate-y-1 flex flex-col text-inherit no-underline block focus:outline-none focus-visible:ring-2 focus-visible:ring-sullips-moss focus-visible:ring-offset-2 focus-visible:ring-offset-sullips-parchment' do %>
+  <%= card_inner %>
 <% end %>

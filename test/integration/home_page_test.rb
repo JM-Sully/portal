@@ -53,14 +53,33 @@ class HomePageTest < ActionDispatch::IntegrationTest
     assert_select "a[href='#{order_path(order)}']"
   end
 
-  test 'confirmed order card is not linked to order show' do
+  test 'confirmed order card links to order show page' do
     sign_in @user
     order = orders(:one)
     order.update!(user: @user, status: :confirmed)
 
     get root_path
     assert_response :success
-    assert_select "a[href='#{order_path(order)}']", count: 0
+    assert_select "a[href='#{order_path(order)}']"
+  end
+
+  test 'cancelled order card links to order show page' do
+    sign_in @user
+    order = orders(:one)
+    order.update!(user: @user, status: :cancelled, cancelled_at: Time.current)
+
+    get root_path
+    assert_response :success
+    assert_select "a[href='#{order_path(order)}']"
+  end
+
+  test 'cancelled order card omits requested timestamp' do
+    sign_in @user
+    orders(:one).update!(user: @user, status: :cancelled, cancelled_at: Time.current)
+
+    get root_path
+    assert_response :success
+    assert_no_match(/Requested .* ago/, response.body)
   end
 
   test 'displays all available products' do

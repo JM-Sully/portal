@@ -20,7 +20,7 @@ class OrderEditFlowTest < ActionDispatch::IntegrationTest
 
     get order_path(@order)
     assert_response :success
-    assert_no_match(/Updated \d{1,2} \w+ \d{4} at/, response.body)
+    assert_select 'dt', text: 'Updated', count: 0
 
     assert_select "a[href='#{edit_order_path(@order)}']", text: 'Edit'
     get edit_order_path(@order)
@@ -40,7 +40,8 @@ class OrderEditFlowTest < ActionDispatch::IntegrationTest
     assert_redirected_to order_path(@order)
     follow_redirect!
     assert_response :success
-    assert_match(/Updated \d{1,2} \w+ \d{4} at/, response.body)
+    assert_select 'dt', text: 'Updated'
+    assert_match(/\d{1,2} July 2026 at \d{1,2}:\d{2}/, response.body)
     assert_match(/Halifax/, response.body)
     assert_match(/Revised details after discussion/, response.body)
   end

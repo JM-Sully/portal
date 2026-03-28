@@ -10,7 +10,11 @@ Rails.application.routes.draw do
     resource :booking, only: %i[new create], controller: 'bookings'
   end
 
-  resources :orders, only: %i[show edit update]
+  resources :orders, only: %i[show edit update] do
+    member do
+      post :cancel
+    end
+  end
 
   # Defines the root path route ("/")
   root 'home#index'

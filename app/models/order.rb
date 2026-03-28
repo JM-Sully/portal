@@ -16,6 +16,7 @@ class Order < ApplicationRecord
   validates :event_duration_days, presence: true,
                                   numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 365 }
   validates :city, :country, :additional_details, presence: true
+  validates :cancelled_at, presence: true, if: :cancelled?
   validate :starts_on_minimum_lead_time
 
   def self.booking_minimum_lead_period
@@ -33,6 +34,7 @@ class Order < ApplicationRecord
   private
 
   def starts_on_minimum_lead_time
+    return if cancelled?
     return if starts_on.blank?
 
     earliest = Order.earliest_bookable_starts_on

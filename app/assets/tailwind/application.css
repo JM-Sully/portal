@@ -49,4 +49,8 @@
   .link-underline-auth {
     @apply border-b border-transparent hover:border-sullips-moss/30;
   }
+
+  .dialog-cancel-booking::backdrop {
+    background-color: rgb(47 42 38 / 0.45);
+  }
 }
