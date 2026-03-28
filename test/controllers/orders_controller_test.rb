@@ -20,6 +20,15 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_match @order.city, response.body
     assert_match @order.country, response.body
     assert_match @order.additional_details, response.body
+    assert_match(/review your booking request within 5 business days/, response.body)
+  end
+
+  test 'show displays confirmed status message' do
+    sign_in @user
+    @order.update!(status: :confirmed)
+    get order_path(@order)
+    assert_response :success
+    assert_match(/approved your booking request/, response.body)
   end
 
   test 'show redirects when order belongs to another user' do

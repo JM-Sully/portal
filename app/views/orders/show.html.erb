@@ -1,105 +1,135 @@
 <div class="container mx-auto px-6 pt-6 pb-12">
-  <div class="max-w-xl">
+  <div class="max-w-6xl mx-auto">
     <div class="mb-6">
       <%= link_to 'Back to My Orders', root_path, class: 'text-sullips-muted hover:text-sullips-moss text-sm transition-colors border-b border-transparent hover:border-sullips-moss/30' %>
     </div>
 
-    <div class="bg-sullips-surface border border-sullips-border rounded-lg overflow-hidden shadow-soft mb-6">
-      <%= product_image_tag(@order.product) %>
-      <div class="p-6 flex flex-col">
-        <div class="flex items-start justify-between gap-2 mb-4">
-          <h1 class="text-2xl font-semibold text-sullips-text"><%= @order.product.title %></h1>
-          <% if @order.pending? %>
-            <span class="shrink-0 px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-900 border border-amber-200/80">Pending</span>
-          <% elsif @order.confirmed? %>
-            <span class="shrink-0 px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-900 border border-emerald-200/80">Confirmed</span>
-          <% elsif @order.cancelled? %>
-            <span class="shrink-0 px-2 py-0.5 rounded text-xs font-semibold bg-sullips-chip text-sullips-muted border border-sullips-border">Cancelled</span>
-          <% end %>
-        </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div class="lg:col-span-7 xl:col-span-8">
+        <div class="bg-sullips-surface border border-sullips-border rounded-lg overflow-hidden shadow-soft mb-6">
+          <%= product_image_tag(@order.product) %>
+          <div class="p-6 flex flex-col">
+            <div class="flex items-start justify-between gap-2 mb-4">
+              <h1 class="text-2xl font-semibold text-sullips-text"><%= @order.product.title %></h1>
+              <% if @order.pending? %>
+                <span class="shrink-0 px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-900 border border-amber-200/80">Pending</span>
+              <% elsif @order.confirmed? %>
+                <span class="shrink-0 px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-900 border border-emerald-200/80">Confirmed</span>
+              <% elsif @order.cancelled? %>
+                <span class="shrink-0 px-2 py-0.5 rounded text-xs font-semibold bg-sullips-chip text-sullips-muted border border-sullips-border">Cancelled</span>
+              <% end %>
+            </div>
 
-        <dl class="space-y-4 text-sm">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <dt class="font-medium text-sullips-text mb-1">Start date</dt>
-              <dd class="text-sullips-muted"><%= @order.starts_on.strftime('%d %B %Y') %></dd>
-            </div>
-            <div>
-              <dt class="font-medium text-sullips-text mb-1">Number of days</dt>
-              <dd class="text-sullips-muted"><%= @order.event_duration_days %></dd>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <dt class="font-medium text-sullips-text mb-1">City</dt>
-              <dd class="text-sullips-muted"><%= @order.city %></dd>
-            </div>
-            <div>
-              <dt class="font-medium text-sullips-text mb-1">Country</dt>
-              <dd class="text-sullips-muted"><%= @order.country %></dd>
-            </div>
-          </div>
-          <div>
-            <dt class="font-medium text-sullips-text mb-1">Additional details</dt>
-            <dd class="text-sullips-muted whitespace-pre-wrap"><%= @order.additional_details %></dd>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <dt class="font-medium text-sullips-text mb-1">Requested</dt>
-              <dd class="text-sullips-muted">
-                <%= @order.created_at.strftime('%d %B %Y at %H:%M') %>
-              </dd>
-            </div>
-            <% if @order.updated_after_request? %>
-              <div>
-                <dt class="font-medium text-sullips-text mb-1">Updated</dt>
-                <dd class="text-sullips-muted"><%= @order.updated_at.strftime('%d %B %Y at %H:%M') %></dd>
-              </div>
-            <% end %>
-            <% if @order.cancelled? && @order.cancelled_at.present? %>
-              <div>
-                <dt class="font-medium text-sullips-text mb-1">Cancelled</dt>
-                <dd class="text-sullips-muted"><%= @order.cancelled_at.strftime('%d %B %Y at %H:%M') %></dd>
-              </div>
-            <% end %>
-          </div>
-        </dl>
-
-        <% if @order.pending? || @order.confirmed? %>
-          <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-sullips-border">
-            <% if @order.pending? %>
-              <%= link_to 'Edit', edit_order_path(@order),
-                  class: 'inline-block px-4 py-2 rounded-md bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment text-sm font-medium transition-all duration-200 shadow-sullips hover:shadow-sullips active:scale-[0.99]' %>
-            <% end %>
-
-            <div data-controller="cancel-modal">
-              <button type="button" data-action="click->cancel-modal#open"
-                  class="px-4 py-2 rounded-md border border-sullips-moss bg-transparent hover:bg-sullips-moss/10 text-sullips-moss text-sm font-medium transition-all duration-200 cursor-pointer">
-                Cancel
-              </button>
-
-              <dialog data-cancel-modal-target="dialog"
-                  class="dialog-cancel-booking fixed left-1/2 top-1/2 z-50 max-h-[calc(100vh-2rem)] w-[min(100vw-2rem,28rem)] max-w-md -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl border border-sullips-border bg-sullips-surface p-6 shadow-soft m-0">
-                <p class="text-sullips-text text-base leading-relaxed mb-6">
-                  <% if @order.pending? %>
-                    Are you sure you want to cancel your request?
-                  <% else %>
-                    Are you sure you want to cancel your booking with Jess?
-                  <% end %>
-                </p>
-                <div class="flex flex-wrap justify-end gap-3">
-                  <button type="button" data-action="click->cancel-modal#close"
-                      class="px-4 py-2 rounded-md border border-sullips-border text-sullips-text text-sm font-medium hover:bg-sullips-chip/40 transition-colors cursor-pointer">
-                    Go back
-                  </button>
-                  <%= button_to 'Yes, cancel', cancel_order_path(@order), method: :post,
-                      class: 'px-4 py-2 rounded-md bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment text-sm font-medium shadow-sullips hover:shadow-sullips transition-all duration-200 cursor-pointer border-0' %>
+            <dl class="space-y-4 text-sm">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <dt class="font-medium text-sullips-text mb-1">Start date</dt>
+                  <dd class="text-sullips-muted"><%= @order.starts_on.strftime('%d %B %Y') %></dd>
                 </div>
-              </dialog>
-            </div>
+                <div>
+                  <dt class="font-medium text-sullips-text mb-1">Number of days</dt>
+                  <dd class="text-sullips-muted"><%= @order.event_duration_days %></dd>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <dt class="font-medium text-sullips-text mb-1">City</dt>
+                  <dd class="text-sullips-muted"><%= @order.city %></dd>
+                </div>
+                <div>
+                  <dt class="font-medium text-sullips-text mb-1">Country</dt>
+                  <dd class="text-sullips-muted"><%= @order.country %></dd>
+                </div>
+              </div>
+              <div>
+                <dt class="font-medium text-sullips-text mb-1">Additional details</dt>
+                <dd class="text-sullips-muted whitespace-pre-wrap"><%= @order.additional_details %></dd>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <dt class="font-medium text-sullips-text mb-1">Requested</dt>
+                  <dd class="text-sullips-muted">
+                    <%= @order.created_at.strftime('%d %B %Y at %H:%M') %>
+                  </dd>
+                </div>
+                <% if @order.updated_after_request? %>
+                  <div>
+                    <dt class="font-medium text-sullips-text mb-1">Updated</dt>
+                    <dd class="text-sullips-muted"><%= @order.updated_at.strftime('%d %B %Y at %H:%M') %></dd>
+                  </div>
+                <% end %>
+                <% if @order.cancelled? && @order.cancelled_at.present? %>
+                  <div>
+                    <dt class="font-medium text-sullips-text mb-1">Cancelled</dt>
+                    <dd class="text-sullips-muted"><%= @order.cancelled_at.strftime('%d %B %Y at %H:%M') %></dd>
+                  </div>
+                <% end %>
+              </div>
+            </dl>
+
+            <% if @order.pending? || @order.confirmed? %>
+              <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-sullips-border">
+                <% if @order.pending? %>
+                  <%= link_to 'Edit', edit_order_path(@order),
+                      class: 'inline-block px-4 py-2 rounded-md bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment text-sm font-medium transition-all duration-200 shadow-sullips hover:shadow-sullips active:scale-[0.99]' %>
+                <% end %>
+
+                <div data-controller="cancel-modal">
+                  <button type="button" data-action="click->cancel-modal#open"
+                      class="px-4 py-2 rounded-md border border-sullips-moss bg-transparent hover:bg-sullips-moss/10 text-sullips-moss text-sm font-medium transition-all duration-200 cursor-pointer">
+                    Cancel
+                  </button>
+
+                  <dialog data-cancel-modal-target="dialog"
+                      class="dialog-cancel-booking fixed left-1/2 top-1/2 z-50 max-h-[calc(100vh-2rem)] w-[min(100vw-2rem,28rem)] max-w-md -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl border border-sullips-border bg-sullips-surface p-6 shadow-soft m-0">
+                    <p class="text-sullips-text text-base leading-relaxed mb-6">
+                      <% if @order.pending? %>
+                        Are you sure you want to cancel your request?
+                      <% else %>
+                        Are you sure you want to cancel your booking with Jess?
+                      <% end %>
+                    </p>
+                    <div class="flex flex-wrap justify-end gap-3">
+                      <button type="button" data-action="click->cancel-modal#close"
+                          class="px-4 py-2 rounded-md border border-sullips-border text-sullips-text text-sm font-medium hover:bg-sullips-chip/40 transition-colors cursor-pointer">
+                        Go back
+                      </button>
+                      <%= button_to 'Yes, cancel', cancel_order_path(@order), method: :post,
+                          class: 'px-4 py-2 rounded-md bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment text-sm font-medium shadow-sullips hover:shadow-sullips transition-all duration-200 cursor-pointer border-0' %>
+                    </div>
+                  </dialog>
+                </div>
+              </div>
+            <% end %>
           </div>
-        <% end %>
+        </div>
       </div>
+
+      <% if @order.pending? %>
+        <aside class="lg:col-span-5 xl:col-span-4">
+          <div class="bg-sullips-surface border border-sullips-border rounded-lg p-6 shadow-soft">
+            <p class="text-sullips-text text-sm leading-relaxed">
+              Jess will review your booking request within 5 business days. Check back here for updates.
+            </p>
+          </div>
+        </aside>
+      <% elsif @order.confirmed? %>
+        <aside class="lg:col-span-5 xl:col-span-4">
+          <div class="bg-sullips-surface border border-sullips-border rounded-lg p-6 shadow-soft">
+            <p class="text-sullips-text text-sm leading-relaxed">
+              Jess has approved your booking request! She'll reach out to confirm details and start planning.
+            </p>
+          </div>
+        </aside>
+      <% elsif @order.cancelled? %>
+        <aside class="lg:col-span-5 xl:col-span-4">
+          <div class="bg-sullips-surface border border-sullips-border rounded-lg p-6 shadow-soft">
+            <p class="text-sullips-text text-sm leading-relaxed">
+              Your booking request has been cancelled.
+            </p>
+          </div>
+        </aside>
+      <% end %>
     </div>
   </div>
 </div>
