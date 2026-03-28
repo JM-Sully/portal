@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Order < ApplicationRecord
+  encrypts :additional_details
+
   enum status: {
     pending: 'pending',
     confirmed: 'confirmed',
