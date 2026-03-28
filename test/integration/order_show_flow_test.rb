@@ -25,5 +25,7 @@ class OrderShowFlowTest < ActionDispatch::IntegrationTest
     assert_select 'dt', text: 'Country'
     assert_select 'dt', text: 'Additional details'
     assert_select 'dd', text: @order.additional_details
+    assert_select "a[href='#{edit_order_path(@order)}']", text: 'Edit'
   end
 end
+

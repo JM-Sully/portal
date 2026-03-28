@@ -142,6 +142,18 @@ class OrderTest < ActiveSupport::TestCase
     assert order.valid?
   end
 
+  test 'updated_after_request? compares updated_at to created_at' do
+    order = orders(:one)
+    t = Time.zone.parse('2026-02-01 12:00:00')
+    order.update_columns(created_at: t, updated_at: t)
+    order.reload
+    assert_not order.updated_after_request?
+
+    order.update_columns(created_at: t, updated_at: t + 2.seconds)
+    order.reload
+    assert order.updated_after_request?
+  end
+
   test 'rejects invalid event duration' do
     user = users(:one)
     product = products(:one)

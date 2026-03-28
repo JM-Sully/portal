@@ -24,6 +24,10 @@ class Order < ApplicationRecord
     Date.current + booking_minimum_lead_period
   end
 
+  def updated_after_request?
+    updated_at.to_i > created_at.to_i
+  end
+
   private
 
   def starts_on_minimum_lead_time
