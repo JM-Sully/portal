@@ -49,17 +49,17 @@ class HomePageTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'h3', text: @product1.title
     assert_select 'h3', text: @product2.title
+    assert_select 'h3', text: 'Dog Sitting'
   end
 
-  test 'displays purchase buttons for products without external URLs' do
+  test 'displays request booking links for bookable services' do
     sign_in @user
     get root_path
     assert_response :success
-    assert_select 'button', text: 'Purchase'
+    assert_select 'a', text: 'Request booking', count: 2
   end
 
   test 'displays external link for products with external URLs' do
-    @product1.update(external_url: 'https://www.rover.com')
     sign_in @user
     get root_path
     assert_response :success

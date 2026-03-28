@@ -1,16 +1,39 @@
 <div class="bg-sullips-surface border border-sullips-border rounded-lg overflow-hidden shadow-soft hover:shadow-sullips transition-shadow duration-200 flex flex-col">
   <%= product_image_tag(order.product) %>
-  
+
   <div class="p-6 flex flex-col flex-grow">
-    <h3 class="text-xl font-semibold text-sullips-text mb-2">
-      <%= order.product.title %>
-    </h3>
-    <p class="text-sullips-muted text-sm mb-4 line-clamp-2 flex-grow">
+    <div class="flex items-start justify-between gap-2 mb-2">
+      <h3 class="text-xl font-semibold text-sullips-text">
+        <%= order.product.title %>
+      </h3>
+      <% if order.pending? %>
+        <span class="shrink-0 px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-900 border border-amber-200/80">Pending</span>
+      <% elsif order.confirmed? %>
+        <span class="shrink-0 px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-900 border border-emerald-200/80">Confirmed</span>
+      <% elsif order.cancelled? %>
+        <span class="shrink-0 px-2 py-0.5 rounded text-xs font-semibold bg-sullips-chip text-sullips-muted border border-sullips-border">Cancelled</span>
+      <% end %>
+    </div>
+    <p class="text-sullips-muted text-sm mb-3 line-clamp-2">
       <%= order.product.description %>
     </p>
-    <div class="flex items-center justify-between mt-auto">
+    <% if order.starts_on.present? %>
+      <p class="text-sullips-text text-sm mb-1">
+        <span class="font-medium text-sullips-text">Starts:</span>
+        <%= order.starts_on.strftime('%d %B %Y') %>
+        <% if order.event_duration_days.present? %>
+          · <%= pluralize(order.event_duration_days, 'day') %>
+        <% end %>
+      </p>
+      <% if order.city.present? && order.country.present? %>
+        <p class="text-sullips-muted text-sm mb-4">
+          <%= order.city %>, <%= order.country %>
+        </p>
+      <% end %>
+    <% end %>
+    <div class="flex items-center justify-between mt-auto pt-2">
       <span class="text-sullips-text text-sm font-medium">
-        Ordered <%= time_ago_in_words(order.created_at) %> ago
+        Requested <%= time_ago_in_words(order.created_at) %> ago
       </span>
       <% if order.product.variable_pricing? %>
         <span class="text-sullips-moss text-sm font-medium">Variable pricing</span>

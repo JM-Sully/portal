@@ -5,7 +5,10 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   resource :account, only: %i[edit update], controller: 'accounts'
-  resources :orders, only: [:create]
+
+  resources :products, only: [] do
+    resource :booking, only: %i[new create], controller: 'bookings'
+  end
 
   # Defines the root path route ("/")
   root 'home#index'
