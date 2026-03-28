@@ -57,6 +57,7 @@ class OrdersController < ApplicationController
   end
 
   def order_not_found
-    redirect_to root_path, alert: 'Order not found.'
+    redirect_to root_path,
+                alert: "That booking isn't available. It may have been removed, or it may belong to a different account."
   end
 end

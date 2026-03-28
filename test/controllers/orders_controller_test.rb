@@ -36,14 +36,14 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
     other_order = orders(:two)
     get order_path(other_order)
     assert_redirected_to root_path
-    assert_equal 'Order not found.', flash[:alert]
+    assert_match(/That booking isn't available/, flash[:alert])
   end
 
   test 'show redirects when id does not exist' do
     sign_in @user
     get order_path(999_999)
     assert_redirected_to root_path
-    assert_equal 'Order not found.', flash[:alert]
+    assert_match(/That booking isn't available/, flash[:alert])
   end
 
   test 'show requires authentication' do

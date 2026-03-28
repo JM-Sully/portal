@@ -6,7 +6,7 @@ module Users
 
     def after_sign_in_path_for(resource)
       flash[:notice] = "Welcome back, #{resource.first_name}!"
-      super
+      resolve_post_auth_redirect(super, resource)
     end
   end
 end
