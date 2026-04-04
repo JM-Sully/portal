@@ -17,13 +17,25 @@
   /* Custom shadows */
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.06);
   --shadow-sullips: 0 2px 8px rgba(95, 122, 97, 0.15), 0 4px 16px rgba(0, 0, 0, 0.04);
-  --shadow-logo: 0 4px 24px rgba(125, 67, 53, 0.12);
 
   /* Font family - Inter only for cohesive typography */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer components {
+  /* Moss → sullips-surface (#f6f2e9): opaque mixes so it reads green, not cream */
+  .logo-halo {
+    background: radial-gradient(
+      circle at center,
+      rgb(163 176 158) 0%,
+      rgb(193 200 185) 24%,
+      rgb(219 220 208) 44%,
+      rgb(234 232 222) 58%,
+      rgb(246 242 233) 74%,
+      rgb(246 242 233) 100%
+    );
+  }
+
   .form-input-auth {
     @apply w-full rounded-md border border-sullips-border bg-sullips-input text-sullips-text placeholder-sullips-muted;
     @apply focus:border-sullips-moss focus:ring-2 focus:ring-sullips-moss/30 focus:outline-none;

@@ -11,8 +11,11 @@
       <header class="bg-sullips-surface border-b border-sullips-border/80 shadow-soft">
         <div class="container mx-auto px-6 py-4 flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <%= image_tag "logo.svg", alt: "Sullips Ltd", class: "h-8 w-auto" %>
-            <span class="text-sullips-logo font-medium text-xl tracking-[0.15em] uppercase">Sullips Ltd</span>
+            <%= image_tag "logo.svg", alt: 'Jess Sullivan', class: "h-8 w-auto" %>
+            <div class="flex flex-col leading-tight">
+              <span class="text-sullips-logo font-medium text-xl tracking-tight">Jess Sullivan</span>
+              <span class="text-sullips-muted text-xs tracking-wide hidden sm:block">Talks, trails & trusted care</span>
+            </div>
           </div>
           <div class="flex items-center gap-3">
             <%= button_to "Log out", destroy_user_session_path, method: :delete, data: { turbo: false },
