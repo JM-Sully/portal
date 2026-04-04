@@ -1,0 +1,45 @@
+<%= form_with model: order, html: { class: 'space-y-6' } do |f| %>
+  <% if order.errors.any? %>
+    <div id="error_explanation" class="mb-6 p-4 rounded-md bg-sullips-clay/10 border border-sullips-clay/30">
+      <h3 class="text-sm font-medium text-sullips-clay mb-2">
+        <%= pluralize(order.errors.count, 'issue') %> prevented this booking from being saved:
+      </h3>
+      <ul class="list-disc list-inside text-sm text-sullips-muted space-y-1">
+        <% order.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :starts_on, 'Start date of the event', class: 'block text-sm font-medium text-sullips-text mb-1.5 tracking-wide' %>
+    <%= f.date_field :starts_on, class: 'form-input-auth', required: true,
+        min: Order.earliest_bookable_starts_on.iso8601 %>
+  </div>
+
+  <div>
+    <%= f.label :event_duration_days, 'Number of days', class: 'block text-sm font-medium text-sullips-text mb-1.5 tracking-wide' %>
+    <%= f.number_field :event_duration_days, min: 1, max: 365, step: 1, class: 'form-input-auth', required: true %>
+  </div>
+
+  <div>
+    <%= f.label :city, 'City', class: 'block text-sm font-medium text-sullips-text mb-1.5 tracking-wide' %>
+    <%= f.text_field :city, class: 'form-input-auth', autocomplete: 'address-level2', required: true %>
+  </div>
+
+  <div>
+    <%= f.label :country, 'Country', class: 'block text-sm font-medium text-sullips-text mb-1.5 tracking-wide' %>
+    <%= f.text_field :country, class: 'form-input-auth', autocomplete: 'country-name', required: true %>
+  </div>
+
+  <div>
+    <%= f.label :additional_details, 'Additional details', class: 'block text-sm font-medium text-sullips-text mb-1.5 tracking-wide' %>
+    <p class="text-sullips-muted text-xs mb-1.5">Anything that helps Jess prepare for this event.</p>
+    <%= f.text_area :additional_details, rows: 5, class: 'form-input-auth', required: true %>
+  </div>
+
+  <div class="pt-2">
+    <%= f.submit submit_label, class: 'form-submit-auth' %>
+  </div>
+<% end %>

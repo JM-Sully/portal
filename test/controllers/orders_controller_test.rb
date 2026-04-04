@@ -4,50 +4,196 @@ require 'test_helper'
 
 class OrdersControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
+  include ActiveSupport::Testing::TimeHelpers
 
   setup do
     @user = users(:one)
-    @product = products(:one)
+    @order = orders(:one)
+    @order.update!(user: @user)
   end
 
-  test 'should create order when authenticated' do
+  test 'show displays booking details for owner' do
     sign_in @user
-    Order.where(user: @user, product: @product).destroy_all
-
-    assert_difference 'Order.count', 1 do
-      post orders_path, params: { product_id: @product.id }
-    end
-    assert_redirected_to root_path
-    assert_equal 'Order placed successfully!', flash[:notice]
+    get order_path(@order)
+    assert_response :success
+    assert_select 'h1', text: @order.product.title
+    assert_match @order.city, response.body
+    assert_match @order.country, response.body
+    assert_match @order.additional_details, response.body
+    assert_match(/review your booking request within 5 business days/, response.body)
   end
 
-  test 'should redirect to sign in when not authenticated' do
-    post orders_path, params: { product_id: @product.id }
+  test 'show displays confirmed status message' do
+    sign_in @user
+    @order.update!(status: :confirmed)
+    get order_path(@order)
+    assert_response :success
+    assert_match(/approved your booking request/, response.body)
+  end
+
+  test 'show redirects when order belongs to another user' do
+    sign_in @user
+    other_order = orders(:two)
+    get order_path(other_order)
+    assert_redirected_to root_path
+    assert_match(/That booking isn't available/, flash[:alert])
+  end
+
+  test 'show redirects when id does not exist' do
+    sign_in @user
+    get order_path(999_999)
+    assert_redirected_to root_path
+    assert_match(/That booking isn't available/, flash[:alert])
+  end
+
+  test 'show requires authentication' do
+    get order_path(@order)
     assert_redirected_to new_user_session_path
   end
 
-  test 'should handle invalid product_id' do
+  test 'show includes edit link only for pending orders' do
     sign_in @user
-    post orders_path, params: { product_id: 99999 }
-    assert_redirected_to root_path
-    assert_equal 'Product not found.', flash[:alert]
+    get order_path(@order)
+    assert_select "a[href='#{edit_order_path(@order)}']", text: 'Edit'
+
+    @order.update!(status: :confirmed)
+    get order_path(@order)
+    assert_select "a[href='#{edit_order_path(@order)}']", count: 0
   end
 
-  test 'should prevent duplicate orders' do
+  test 'edit renders for pending order owner' do
     sign_in @user
-    Order.where(user: @user, product: @product).destroy_all
-    Order.create!(user: @user, product: @product)
-
-    assert_no_difference 'Order.count' do
-      post orders_path, params: { product_id: @product.id }
-    end
-    assert_redirected_to root_path
-    assert_match(/already ordered/, flash[:alert])
+    get edit_order_path(@order)
+    assert_response :success
+    assert_select 'h2', text: 'Edit booking'
+    assert_select 'form[action=?]', order_path(@order)
   end
 
-  test 'should not change order count for unauthenticated request' do
-    assert_no_difference 'Order.count' do
-      post orders_path, params: { product_id: @product.id }
+  test 'edit redirects when order is not pending' do
+    sign_in @user
+    @order.update!(status: :confirmed)
+    get edit_order_path(@order)
+    assert_redirected_to order_path(@order)
+    assert_match(/Only pending bookings can be edited/, flash[:alert])
+  end
+
+  test 'edit redirects when order belongs to another user' do
+    sign_in @user
+    get edit_order_path(orders(:two))
+    assert_redirected_to root_path
+  end
+
+  test 'update changes booking and redirects' do
+    sign_in @user
+    travel_to Time.zone.local(2026, 1, 1, 12, 0, 0) do
+      patch order_path(@order), params: {
+        order: {
+          starts_on: Date.new(2026, 1, 20).to_s,
+          event_duration_days: 3,
+          city: 'Victoria',
+          country: 'Canada',
+          additional_details: 'Updated notes for Jess.'
+        }
+      }
     end
+    assert_redirected_to order_path(@order)
+    assert_equal 'Changes saved.', flash[:notice]
+    @order.reload
+    assert_equal 'Victoria', @order.city
+    assert_equal 3, @order.event_duration_days
+    assert_equal 'Updated notes for Jess.', @order.additional_details
+  end
+
+  test 'update renders edit with errors when date is too soon' do
+    sign_in @user
+    travel_to Time.zone.local(2026, 1, 1, 12, 0, 0) do
+      patch order_path(@order), params: {
+        order: {
+          starts_on: Date.new(2026, 1, 10).to_s,
+          event_duration_days: @order.event_duration_days,
+          city: @order.city,
+          country: @order.country,
+          additional_details: @order.additional_details
+        }
+      }
+    end
+    assert_response :unprocessable_entity
+    assert_select '#error_explanation'
+  end
+
+  test 'update redirects when order is not pending' do
+    sign_in @user
+    @order.update!(status: :confirmed)
+    patch order_path(@order), params: {
+      order: {
+        starts_on: @order.starts_on,
+        event_duration_days: @order.event_duration_days,
+        city: @order.city,
+        country: @order.country,
+        additional_details: @order.additional_details
+      }
+    }
+    assert_redirected_to order_path(@order)
+    assert_match(/Only pending bookings can be edited/, flash[:alert])
+  end
+
+  test 'cancel sets cancelled status and timestamp for pending order' do
+    sign_in @user
+    post cancel_order_path(@order)
+    assert_redirected_to order_path(@order)
+    assert_equal 'Booking cancelled.', flash[:notice]
+    @order.reload
+    assert @order.cancelled?
+    assert_not_nil @order.cancelled_at
+  end
+
+  test 'cancel sets cancelled status for confirmed order' do
+    sign_in @user
+    @order.update!(status: :confirmed)
+    post cancel_order_path(@order)
+    assert_redirected_to order_path(@order)
+    @order.reload
+    assert @order.cancelled?
+    assert_not_nil @order.cancelled_at
+  end
+
+  test 'cancel redirects when already cancelled' do
+    sign_in @user
+    @order.update!(status: :cancelled, cancelled_at: 1.hour.ago)
+    post cancel_order_path(@order)
+    assert_redirected_to order_path(@order)
+    assert_match(/cannot be cancelled/, flash[:alert])
+  end
+
+  test 'cancel redirects for another users order' do
+    sign_in @user
+    post cancel_order_path(orders(:two))
+    assert_redirected_to root_path
+  end
+
+  test 'show includes cancel for pending and confirmed' do
+    sign_in @user
+    get order_path(@order)
+    assert_select 'button', text: 'Cancel'
+
+    @order.update!(status: :confirmed)
+    get order_path(@order)
+    assert_select 'button', text: 'Cancel'
+  end
+
+  test 'show omits cancel for cancelled order' do
+    sign_in @user
+    @order.update!(status: :cancelled, cancelled_at: Time.current)
+    get order_path(@order)
+    assert_select 'button', text: 'Cancel', count: 0
+  end
+
+  test 'show displays cancelled timestamp when cancelled' do
+    sign_in @user
+    t = Time.zone.parse('2026-04-10 15:30:00')
+    @order.update!(status: :cancelled, cancelled_at: t)
+    get order_path(@order)
+    assert_select 'dt', text: 'Cancelled'
+    assert_match(/10 April 2026 at 15:30/, response.body)
   end
 end

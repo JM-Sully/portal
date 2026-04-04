@@ -8,7 +8,7 @@ module Users
 
     def after_sign_up_path_for(resource)
       flash[:notice] = "Welcome, #{resource.first_name}! You have signed up successfully."
-      super
+      resolve_post_auth_redirect(super, resource)
     end
 
     private

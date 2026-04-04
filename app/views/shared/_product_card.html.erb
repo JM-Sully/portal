@@ -15,10 +15,9 @@
             class: 'px-4 py-2 rounded-md bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment text-sm font-medium transition-all duration-200 cursor-pointer shadow-sullips hover:shadow-sullips active:scale-[0.99]' do %>
           Book on Rover
         <% end %>
-      <% else %>
-        <%= button_to 'Purchase', orders_path(product_id: product.id),
-            method: :post,
-            class: 'px-4 py-2 rounded-md bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment text-sm font-medium transition-all duration-200 cursor-pointer shadow-sullips hover:shadow-sullips active:scale-[0.99]' %>
+      <% elsif product.requires_booking? %>
+        <%= link_to 'Request booking', new_product_booking_path(product),
+            class: 'inline-block px-4 py-2 rounded-md bg-sullips-moss hover:bg-sullips-pine text-sullips-parchment text-sm font-medium transition-all duration-200 cursor-pointer shadow-sullips hover:shadow-sullips active:scale-[0.99]' %>
       <% end %>
       
       <% if product.variable_pricing? %>

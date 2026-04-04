@@ -3,7 +3,19 @@
 one:
   user: one
   product: one
+  status: pending
+  starts_on: <%= Date.current + 21.days %>
+  event_duration_days: 2
+  city: Edinburgh
+  country: Scotland
+  additional_details: Group of 6, moderate pace.
 
 two:
   user: two
   product: two
+  status: pending
+  starts_on: <%= Date.current + 14.days %>
+  event_duration_days: 1
+  city: Glasgow
+  country: Scotland
+  additional_details: Keynote on Rails upgrades, 200 attendees.

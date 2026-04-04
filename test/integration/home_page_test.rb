@@ -43,23 +43,62 @@ class HomePageTest < ActionDispatch::IntegrationTest
     assert_select 'h3', text: @product1.title
   end
 
+  test 'pending order card links to order show page' do
+    sign_in @user
+    order = orders(:one)
+    order.update!(user: @user, status: :pending)
+
+    get root_path
+    assert_response :success
+    assert_select "a[href='#{order_path(order)}']"
+  end
+
+  test 'confirmed order card links to order show page' do
+    sign_in @user
+    order = orders(:one)
+    order.update!(user: @user, status: :confirmed)
+
+    get root_path
+    assert_response :success
+    assert_select "a[href='#{order_path(order)}']"
+  end
+
+  test 'cancelled order card links to order show page' do
+    sign_in @user
+    order = orders(:one)
+    order.update!(user: @user, status: :cancelled, cancelled_at: Time.current)
+
+    get root_path
+    assert_response :success
+    assert_select "a[href='#{order_path(order)}']"
+  end
+
+  test 'cancelled order card omits requested timestamp' do
+    sign_in @user
+    orders(:one).update!(user: @user, status: :cancelled, cancelled_at: Time.current)
+
+    get root_path
+    assert_response :success
+    assert_no_match(/Requested .* ago/, response.body)
+  end
+
   test 'displays all available products' do
     sign_in @user
     get root_path
     assert_response :success
     assert_select 'h3', text: @product1.title
     assert_select 'h3', text: @product2.title
+    assert_select 'h3', text: 'Dog Sitting'
   end
 
-  test 'displays purchase buttons for products without external URLs' do
+  test 'displays request booking links for bookable services' do
     sign_in @user
     get root_path
     assert_response :success
-    assert_select 'button', text: 'Purchase'
+    assert_select 'a', text: 'Request booking', count: 2
   end
 
   test 'displays external link for products with external URLs' do
-    @product1.update(external_url: 'https://www.rover.com')
     sign_in @user
     get root_path
     assert_response :success
