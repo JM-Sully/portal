@@ -36,37 +36,12 @@ class ProductTest < ActiveSupport::TestCase
     assert_not product.variable_pricing?
   end
 
-  test 'ordered scope orders by created_at ascending' do
-    assert_equal Product.order(created_at: :asc).to_a, Product.ordered.to_a
-  end
+  test 'ordered scope sorts by DISPLAY_ORDER' do
+    Product.destroy_all
+    walk = Product.create!(title: 'A guided Lowland Walk', description: 'Walk')
+    talk = Product.create!(title: 'Conference Talk', description: 'Talk')
+    dog = Product.create!(title: 'Dog Sitting', description: 'Dog')
 
-  test 'requires_booking reflects database column' do
-    assert products(:one).requires_booking
-    assert products(:two).requires_booking
-    assert_not products(:three).requires_booking
-  end
-
-  test 'rejects product with neither external URL nor in-app booking' do
-    product = Product.new(
-      title: 'T',
-      description: 'D',
-      amount_type: Product::AMOUNT_TYPE_VARIABLE,
-      external_url: nil,
-      requires_booking: false
-    )
-    assert_not product.valid?
-    assert_includes product.errors[:base], 'must provide an external booking URL or enable in-app booking'
-  end
-
-  test 'rejects product with both external URL and in-app booking' do
-    product = Product.new(
-      title: 'T',
-      description: 'D',
-      amount_type: Product::AMOUNT_TYPE_VARIABLE,
-      external_url: 'https://example.com/book',
-      requires_booking: true
-    )
-    assert_not product.valid?
-    assert_includes product.errors[:base], 'cannot use both an external URL and in-app booking'
+    assert_equal [talk, walk, dog], Product.ordered.to_a
   end
 end

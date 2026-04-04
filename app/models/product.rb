@@ -3,6 +3,12 @@
 class Product < ApplicationRecord
   AMOUNT_TYPE_VARIABLE = 'variable'.freeze
 
+  DISPLAY_ORDER = [
+    'Conference Talk',
+    'A guided Lowland Walk',
+    'Dog Sitting'
+  ].freeze
+
   has_many :orders, dependent: :destroy
 
   validates :title, presence: true
@@ -10,7 +16,7 @@ class Product < ApplicationRecord
   validates :amount_type, inclusion: { in: [AMOUNT_TYPE_VARIABLE] }, allow_nil: true
   validate :booking_channel_consistent
 
-  scope :ordered, -> { order(created_at: :asc) }
+  scope :ordered, -> { in_order_of(:title, DISPLAY_ORDER) }
 
   def variable_pricing?
     amount_type == AMOUNT_TYPE_VARIABLE
